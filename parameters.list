@@ -1,2 +1,3 @@
 zfs	where to create instance zfs volumes
 vol_param	parameters to use for zfs create -V
+destroy		gnt-instance remove also removes snapshots (set empty to disable)
