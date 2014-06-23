@@ -31,3 +31,7 @@ Now ssh into ganeti master node and do following:
 	-n arh-hw --no-name-check --no-ip-check \
 	-o debootstrap+default -B maxmem=512M zfs-ext-test
 
+KNOWN BUGS
+
+- in current ganeti, gnt-backup export doesn't work because extstorage
+  snapshoot hook is not available
