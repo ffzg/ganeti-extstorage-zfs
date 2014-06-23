@@ -1,5 +1,7 @@
 Ganet extstorage provider for local zfs volumes
 
+http://docs.ganeti.org/ganeti/master/html/man-ganeti-extstorage-interface.html
+
 INSTALLATION
 
 On node which has zfs storage pool
