@@ -2,19 +2,27 @@ Ganet extstorage provider for local zfs volumes
 
 INSTALLATION
 
+On node which has zfs storage pool
+
   cd /usr/share/ganeti/extstorage/
   git clone https://github.com/ffzg/ganeti-extstorage-zfs zfs
+  cd zfs
+  vi defaults.sh
 
-  # enable new disk template
+You need to specify zfs filesystem under which block devices will be created.
+
+Now ssh into ganeti master node and do following:
+
+1. enable new disk template
 
   gnt-cluster modify --enabled-disk-templates plain,drbd,ext \
 	--ipolicy-disk-templates plain,drbd,ext
 
-  # create log directory
+2. create log directory
 
   mkdir /var/log/ganeti/extstorage
 
-  # try instance creation with something similar to
+3. try instance creation with something similar to
 
   gnt-instance add -t ext --disk=0:size=10G,provider=zfs \
 	--disk=1:size=20G,provider=zfs \
