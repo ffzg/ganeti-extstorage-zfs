@@ -1,0 +1,5 @@
+#!/bin/sh
+
+. /usr/share/ganeti/extstorage/zfs/settings.sh
+
+#eject /dev/zvol/$block/$VOL_NAME

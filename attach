@@ -1,0 +1,6 @@
+#!/bin/sh
+
+. /usr/share/ganeti/extstorage/zfs/settings.sh
+
+# Return path to new blockdevice
+echo -n /dev/zvol/$block/$VOL_NAME

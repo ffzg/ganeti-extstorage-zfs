@@ -1,0 +1,5 @@
+#!/bin/sh
+
+. /usr/share/ganeti/extstorage/zfs/settings.sh
+
+zfs set ganti:metadata="$VOL_METADATA" $block/$VOL_NAME
