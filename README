@@ -27,9 +27,12 @@ Now ssh into ganeti master node and do following:
 3. try instance creation with something similar to
 
   gnt-instance add -t ext --disk=0:size=10G,provider=zfs \
-	--disk=1:size=20G,provider=zfs \
-	-n arh-hw --no-name-check --no-ip-check \
-	-o debootstrap+default -B maxmem=512M zfs-ext-test
+	--net 0:mode=bridged,link=br1001 \
+	--net 1:mode=bridged,link=br0060 \
+	--net 2:mode=bridged,link=br0080 \
+	--no-name-check --no-ip-check \
+	-o debootstrap+default \
+	-B maxmem=1G -n arh-hw zfs
 
 KNOWN BUGS
 
