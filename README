@@ -1,0 +1,7 @@
+Ganet extstorage provider for local zfs volumes
+
+INSTALLATION
+
+cd /usr/share/ganeti/extstorage/
+git clone https://github.com/ffzg/ganeti-extstorage-zfs zfs
+
