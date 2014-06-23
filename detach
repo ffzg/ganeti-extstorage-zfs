@@ -2,4 +2,4 @@
 
 . /usr/share/ganeti/extstorage/zfs/defaults.sh
 
-#eject /dev/zvol/$EXTP_BLOCK/$VOL_NAME
+#eject /dev/zvol/$EXTP_ZFS/$VOL_NAME

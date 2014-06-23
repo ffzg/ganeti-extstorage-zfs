@@ -1,6 +1,6 @@
 
 # zfs pool and file system (existing) where to create block devices
-test -z "$EXTP_BLOCK" && EXTP_BLOCK=tmp500g/block
+test -z "$EXTP_ZFS" && EXTP_ZFS=tmp500g/block
 
 # parameters for zfs create, by default
 # -s	sparse

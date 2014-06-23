@@ -2,4 +2,4 @@
 
 . /usr/share/ganeti/extstorage/zfs/defaults.sh
 
-zfs destroy $EXTP_BLOCK/$VOL_NAME
+zfs destroy $EXTP_ZFS/$VOL_NAME
