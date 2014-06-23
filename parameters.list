@@ -1,0 +1,2 @@
+block	pool/block_path to use for zfs volumes
+vol_param	parameters to use for zfs create -V

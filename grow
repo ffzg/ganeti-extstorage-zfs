@@ -1,5 +1,5 @@
 #!/bin/sh
 
-. /usr/share/ganeti/extstorage/zfs/settings.sh
+. /usr/share/ganeti/extstorage/zfs/defaults.sh
 
-zfs set volsize=${NEW_VOL_SIZE}M $block/$VOL_NAME
+zfs set volsize=${NEW_VOL_SIZE}M $EXTP_BLOCK/$VOL_NAME

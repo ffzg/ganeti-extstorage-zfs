@@ -1,5 +1,5 @@
 #!/bin/sh
 
-. /usr/share/ganeti/extstorage/zfs/settings.sh
+. /usr/share/ganeti/extstorage/zfs/defaults.sh
 
-zfs create -V ${VOL_SIZE}M $vol_param $block/$VOL_NAME
+zfs create -V ${VOL_SIZE}M $EXTP_VOL_PARAM $EXTP_BLOCK/$VOL_NAME
