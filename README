@@ -56,10 +56,27 @@ arh-hw.gnt.ffzg.hr lvm-vg ffzgvg  87.8G  610M  87.2G Y
 
 HELPER SCRIPTS
 
-Helper scripts in bin directory to list volumes, show size or snapshots.
+Helper scripts in bin directory list volumes, show size or snapshots.
 
+
+arh-hw:/usr/share/ganeti/extstorage/zfs# ./bin/list 
+NAME                                                           USED  AVAIL  REFER  MOUNTPOINT
+tmp500g/block                                                  612M  87.2G    30K  /tmp500g/block
+tmp500g/block/af1a90e8-0566-4cbf-bc8c-99fc82b67ce3.ext.disk0   612M  87.2G   610M  -
+
+
+arh-hw:/usr/share/ganeti/extstorage/zfs# ./bin/size 
+NAME                                                          PROPERTY  VALUE    SOURCE
+tmp500g/block/af1a90e8-0566-4cbf-bc8c-99fc82b67ce3.ext.disk0  volsize   11G      local
+
+
+arh-hw:/usr/share/ganeti/extstorage/zfs# ./bin/snapshots 
+NAME                                                                      USED  AVAIL  REFER  MOUNTPOINT
+tmp500g/block@etckeeper                                                      0      -    30K  -
+tmp500g/block/af1a90e8-0566-4cbf-bc8c-99fc82b67ce3.ext.disk0@2014-06-24  2.64M      -   610M  -
 
 KNOWN BUGS
 
 - in current ganeti, gnt-backup export doesn't work because extstorage
   snapshoot hook is not available
+
