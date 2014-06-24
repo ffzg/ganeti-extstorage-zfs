@@ -1,0 +1,25 @@
+#!/bin/sh -x
+
+. /usr/share/ganeti/extstorage/zfs/defaults.sh
+
+set -x
+
+/sbin/lvm lvcreate $*
+
+# gnt-instance move --node arh-hw bbb
+# lvcreate -L5120m -ne4bf0e9d-2c6e-4e1c-8bc4-342ee94724a5.disk0 -i1 ffzgvg tmp500g/block
+if echo $* | grep -q $EXTP_VG ; then
+	while [ ! -z "$1" ] ; do
+		case $1 in 
+
+		-L*) VOL_SIZE=`echo $1 | sed 's/-L//'` ;;
+		-n*) VOL_NAME=`echo $1 | sed 's/-n//'` ;;
+
+		esac
+		shift
+	done
+
+test -e /dev/zvol/$EXTP_ZFS/$VOL_NAME || \
+zfs create -V ${VOL_SIZE} $EXTP_CREATE $EXTP_ZFS/$VOL_NAME
+
+fi
