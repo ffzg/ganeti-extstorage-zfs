@@ -1,0 +1,5 @@
+#!/bin/sh
+
+. /usr/share/ganeti/extstorage/zfs/defaults.sh
+
+zfs get volsize -r $EXTP_ZFS
