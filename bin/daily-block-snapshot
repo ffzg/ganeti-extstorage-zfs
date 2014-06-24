@@ -1,0 +1,5 @@
+#!/bin/sh
+
+. /usr/share/ganeti/extstorage/zfs/defaults.sh
+
+zfs list -r -o name -t volume -H $EXTP_ZFS | xargs -i zfs snap {}@`date +%Y-%m-%d`
