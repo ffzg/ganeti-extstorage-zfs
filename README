@@ -38,6 +38,21 @@ Now ssh into ganeti master node and do following:
 
   ln -sf /usr/share/ganeti/extstorage/zfs/bin/daily-block-snapshot /etc/cron.daily/
 
+5. install lvm wrapper scripts to report zfs volumes as lv
+
+  find /usr/share/ganeti/extstorage/zfs/sbin/ -type f | xargs -i ln -v -s -f {} /sbin/
+
+This scripts enable gnt-node commands to work:
+
+root@vmh02:/home/dpavlin# gnt-node list arh-hw
+Node               DTotal DFree MTotal MNode MFree Pinst Sinst
+arh-hw.gnt.ffzg.hr  87.8G 87.2G   7.8G  252M  5.6G     1     0
+
+root@vmh02:/home/dpavlin# gnt-node list-storage arh-hw
+Node               Type   Name     Size  Used   Free Allocatable
+arh-hw.gnt.ffzg.hr lvm-vg arh-hw 190.0G 62.7G 127.3G Y
+arh-hw.gnt.ffzg.hr lvm-vg ffzgvg  87.8G  610M  87.2G Y
+
 
 HELPER SCRIPTS
 

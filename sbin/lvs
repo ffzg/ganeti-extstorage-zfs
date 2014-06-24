@@ -1,0 +1,13 @@
+#!/bin/sh
+
+. /usr/share/ganeti/extstorage/zfs/defaults.sh
+
+/sbin/lvm lvs $*
+
+# lvs --noheadings --units=m --nosuffix '--separator=|' -ovg_name,lv_name,lv_size,lv_attr
+if echo $* | -q grep vg_name,lv_name,lv_size,lv_attr ; then
+
+	zfs get volsize -t volume -r $EXPN_ZFS -H -p -o name,value | sed "s:$EXPN_ZFS::" | awk '{ print "  '$EXPN_VG'|"$1"|" $2 / 1024 / 1024 "|-wi-ao--" }'
+
+fi
+

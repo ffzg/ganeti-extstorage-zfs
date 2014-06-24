@@ -13,3 +13,6 @@ test -z "$EXTP_CREATE" && EXTP_CREATE="-s -b 4k -o compression=lz4"
 
 # on zfs destroy remove snapshots of instance disks
 test -z "$EXTP_DESTROY" && EXTP_DESTROY="-r"
+
+# emulate VG configured in cluster for wrapper scripts in sbin
+test -z "$EXTP_VG" && EXTP_VG='ffzgvg'

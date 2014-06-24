@@ -1,3 +1,4 @@
 zfs	where to create instance zfs volumes
 create		zfs create -V options
 destroy		gnt-instance remove also removes snapshots (set empty to disable)
+vg		cluster lvm volume group
