@@ -34,6 +34,16 @@ Now ssh into ganeti master node and do following:
 	-o debootstrap+default \
 	-B maxmem=1G -n arh-hw zfs
 
+4. install helper scripts for daily block snapshots
+
+  ln -sf /usr/share/ganeti/extstorage/zfs/bin/daily-block-snapshot /etc/cron.daily/
+
+
+HELPER SCRIPTS
+
+Helper scripts in bin directory to list volumes, show size or snapshots.
+
+
 KNOWN BUGS
 
 - in current ganeti, gnt-backup export doesn't work because extstorage
