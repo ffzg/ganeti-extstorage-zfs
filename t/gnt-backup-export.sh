@@ -1,5 +1,7 @@
 #!/bin/sh -xe
 
-./bin/ill t- | awk '{ print $1 }' | xargs -i ssh `gnt-cluster getmaster` gnt-backup export -n arh-hw {}
-./bin/backup list -n arh-hw | grep t-
+# this scripts assueme that host on which you are doing gnt-backup is localhost
+
+./bin/ill t- | awk '{ print $1 }' | xargs -i ssh `gnt-cluster getmaster` gnt-backup export -n `hostname -s` {}
+./bin/backup list -n `hostname -s` | grep t-
 
