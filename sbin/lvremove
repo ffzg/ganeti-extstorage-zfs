@@ -1,0 +1,20 @@
+#!/bin/sh -x
+
+. /usr/share/ganeti/extstorage/zfs/defaults.sh
+
+# lvremove -f ffzgvg/3e6746a9-cb99-4584-a219-af7e4b5cb5f5.disk0_data.snap
+
+if echo $* | grep -q $EXTP_VG ; then
+	while [ ! -z "$1" ] ; do
+		if echo $1 | grep -q $EXTP_VG ; then
+			VOL_NAME=`echo $1 | sed -e "s:$EXTP_VG/::" -e 's/\.snap$/@snap/'`
+		fi
+		shift;
+	done
+
+	# destroy snapshot and clone
+	zfs destroy -R $EXTP_ZFS/$VOL_NAME
+	test -e /dev/$EXTP_VG/$VOL_NAME && rm /dev/$EXTP_VG/$VOL_NAME
+else
+	/sbin/lvm lvrename $*
+fi
