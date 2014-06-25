@@ -6,6 +6,7 @@
 
 if [ "$EXTP_VG" = "$1" ] ; then
 	zfs rename $EXTP_ZFS/$2 $EXTP_ZFS/$3
+	# FIXME handle renaming of desceding snapshots
 else
 	/sbin/lvm lvrename $*
 fi
