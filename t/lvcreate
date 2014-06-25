@@ -1,1 +1,2 @@
-lvcreate -L5120m -ne4bf0e9d-2c6e-4e1c-8bc4-342ee94724a5.disk0 -i1 ffzgvg tmp500g/block
+#lvcreate -L5120m -ne4bf0e9d-2c6e-4e1c-8bc4-342ee94724a5.disk0 -i1 ffzgvg tmp500g/block
+lvcreate -L2048m -s -n3e6746a9-cb99-4584-a219-af7e4b5cb5f5.disk0_data.snap /dev/ffzgvg/3e6746a9-cb99-4584-a219-af7e4b5cb5f5.disk0_data
