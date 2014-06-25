@@ -5,31 +5,34 @@
 # gnt-instance move --node arh-hw bbb
 # lvcreate -L5120m -ne4bf0e9d-2c6e-4e1c-8bc4-342ee94724a5.disk0 -i1 ffzgvg tmp500g/block
 if echo $* | grep -q $EXTP_VG ; then
-	SNAP=0
+	SNAP='-'
 	while [ ! -z "$1" ] ; do
 		case $1 in 
 
 		-L*) VOL_SIZE=`echo $1 | sed 's/-L//'` ;;
 		-n*) VOL_NAME=`echo $1 | sed 's/-n//'` ;;
-		-s)  SNAP=1 ;;
+		-s)  SNAP='s' ;;
 		/dev/$EXTP_VG/*) VOL_ORIGIN=`echo $1 | cut -d/ -f4`
 
 		esac
 		shift
 	done
 
-	if [ $SNAP = 0 ] ; then
+	if [ $SNAP = '-' ] ; then
 
 		test -e /dev/zvol/$EXTP_ZFS/$VOL_NAME || \
 		zfs create -V ${VOL_SIZE} $EXTP_CREATE $EXTP_ZFS/$VOL_NAME
 
 	else
 
-		zfs snap $EXTP_ZFS/$VOL_ORIGIN@snap
-		sleep 1
-		zfs clone $EXTP_ZFS/$VOL_ORIGIN@snap $EXTP_ZFS/$VOL_NAME
-		sleep 1
-		ln -sfv `readlink -f /dev/zvol/$EXTP_ZFS/$VOL_NAME` /dev/$EXTP_VG/$VOL_NAME
+		zfs snap $EXTP_ZFS/$VOL_ORIGIN@snap || true
+		zfs set lv:s='o' $EXTP_ZFS/$VOL_ORIGIN
+		zfs clone $EXTP_ZFS/$VOL_ORIGIN@snap $EXTP_ZFS/$VOL_NAME || true
+		zfs set lv:s='s' $EXTP_ZFS/$VOL_NAME
+		zfs set ganeti:originstname=$(VOL_NAME=$VOL_ORIGIN zfs_get ganeti:originstname) $EXTP_ZFS/$VOL_NAME
+		export VOL_NAME
+		echo $VOL_NAME
+		$dir/attach
 
 	fi
 

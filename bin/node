@@ -1,2 +1,4 @@
+#!/bin/sh -e
+
 ssh `gnt-cluster getmaster` gnt-node list `hostname -s`
 ssh `gnt-cluster getmaster` gnt-node list-storage `hostname -s`

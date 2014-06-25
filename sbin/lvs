@@ -2,46 +2,38 @@
 
 . /usr/share/ganeti/extstorage/zfs/defaults.sh
 
-export VOL_NAME
-
 VOL() {
+	echo "VOL $@" >&2
 	while [ ! -z "$1" ] ; do
+		echo "XXX $1" >&2
 		case $1 in 
 		*$EXTP_VG*) VOL=`echo $1 | cut -d/ -f4` ;;
-		*) echo "# ignore $1" >&2
 		esac
 		shift
 	done
-	echo "# $VOL" >&2
 	export VOL_NAME=$VOL
-		
+	echo "VOL_NAME $VOL_NAME" >&2
 }
 
 # lvs --noheadings --units=m --nosuffix '--separator=|' -ovg_name,lv_name,lv_size,lv_attr
 if echo $* | grep -q vg_name,lv_name,lv_size,lv_attr ; then
-	zfs list -o name,volsize,lv:a -t volume -r $EXTP_ZFS -H -p | sed "s:$EXTP_ZFS/*::" | \
-	awk '{ print "  '$EXTP_VG'|"$1"|" $2 / 1024 / 1024 "|-wi-a"$3"--" }'
+	zfs list -o name,volsize,lv:s,lv:a -t volume -r $EXTP_ZFS -H -p | sed "s:$EXTP_ZFS/*::" | \
+	awk '{ print "  '$EXTP_VG'|"$1"|" $2 / 1024 / 1024 "|"$3"wi-a"$4"--" }'
 	/sbin/lvm lvs $* 2>/dev/null || exit 0 # local, might fail
 
 # gnt-instance modify -t drbd -n box02 zfs
 # lvs --noheadings '--separator=|' --units=k --nosuffix -olv_attr,lv_kernel_major,lv_kernel_minor,vg_extent_size,stripes,devices /dev/ffzgvg/c72d9ea7-f396-4104-b4ee-8b613da32051.disk1
 elif echo $* | grep -q lv_attr,lv_kernel_major,lv_kernel_minor,vg_extent_size,stripes,devices ; then
 
-	VOL_NAME=VOL $*
-	volblocksize=`zfs get volblocksize -o value -p -H $EXTP_ZFS/$VOL_NAME`
-	perm=`zfs get lv:attr -o value -p -H $EXTP_ZFS/$VOL_NAME`
-	if [ -e /dev/zvol/$EXTP_ZFS/$VOL_NAME.snap ] ; then
-		perm="owi-aos-" # snapshot origin
-	elif echo $VOL_NAME | grep -q '.snap$' ; then
-		perm="swi-a-s-" # snapshot
-	fi
-	ls -al `readlink -f /dev/zvol/$EXTP_ZFS/$VOL_NAME` | sed 's/,//' | awk '{ print "  -wi-ao--|" $5 "|" $6 "|'$volblocksize'|1|" $10 "(" $6 * 1280 + $6 ")" }' # FIXME what is number after device?
+	VOL $5 $6
+	a=$(zfs_get lv:a)
+	s=$(zfs_get lv:s)
+	ls -al `readlink -f /dev/zvol/$EXTP_ZFS/$VOL_NAME` | sed 's/,//' | awk '{ print "  '$s'-wi-a'$a'--|" $5 "|" $6 "|'$(zfs_get volblocksize)'|1|" $10 "(" $6 * 1280 + $6 ")" }' # FIXME what is number after device?
 
 # lvs -o tags --noheadings --nosuffix /dev/ffzgvg/88c6b19f-7b3f-4041-bb9c-d2a0716e459c.disk0
 elif [ "$1" = "-o" ] ; then
 	VOL $@
-	tag=`zfs get lv:tag  -o value -p -H $EXTP_ZFS/$VOL_NAME`
-	echo $tag
+	echo $(zfs_get lv:tag)
 else
 
 	/sbin/lvm lvs $*

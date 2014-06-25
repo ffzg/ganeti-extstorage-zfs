@@ -1,5 +1,6 @@
 #lvs --noheadings '--separator=|' --units=k --nosuffix -olv_attr,lv_kernel_major,lv_kernel_minor,vg_extent_size,stripes,devices /dev/ffzgvg/c72d9ea7-f396-4104-b4ee-8b613da32051.disk1
 #lvs --noheadings '--separator=|' --units=k --nosuffix -olv_attr,lv_kernel_major,lv_kernel_minor,vg_extent_size,stripes,devices /dev/ffzgvg/3e6746a9-cb99-4584-a219-af7e4b5cb5f5.disk0_data
-#lvs --noheadings --units=m --nosuffix '--separator=|' -ovg_name,lv_name,lv_size,lv_attr
+lvs --noheadings --units=m --nosuffix '--separator=|' -ovg_name,lv_name,lv_size,lv_attr
 lvs --noheadings --units=m --nosuffix '--separator=|' -ovg_name,lv_name,lv_size,lv_attr ffzgvg
-lvs -o tags --noheadings --nosuffix /dev/ffzgvg/88c6b19f-7b3f-4041-bb9c-d2a0716e459c.disk0
+#lvs -o tags --noheadings --nosuffix /dev/ffzgvg/88c6b19f-7b3f-4041-bb9c-d2a0716e459c.disk0
+lvs --noheadings '--separator=|' --units=k --nosuffix -olv_attr,lv_kernel_major,lv_kernel_minor,vg_extent_size,stripes,devices /dev/ffzgvg/d501d86b-f421-4811-bcbe-1370da3e3a74.disk0

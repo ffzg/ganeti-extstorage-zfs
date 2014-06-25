@@ -13,8 +13,17 @@ test -e $host_config && . $host_config
 # lz4	compression with low cpu operhead which always helps
 test -z "$EXTP_CREATE" && EXTP_CREATE="-s -b 4k -o compression=lz4"
 
-# on zfs destroy remove snapshots of instance disks
-test -z "$EXTP_DESTROY" && EXTP_DESTROY="-r"
+# on zfs destroy remove dependent snapshots
+test -z "$EXTP_DESTROY" && EXTP_DESTROY="-R"
 
 # emulate VG configured in cluster for wrapper scripts in sbin
 test -z "$EXTP_VG" && EXTP_VG='ffzgvg'
+
+# zfs pool and file system (existing) where to create block devices
+test -z "$EXTP_ZFS" && EXTP_ZFS=tmp500g/$EXTP_VG
+
+export VOL_NAME
+
+zfs_get() {
+zfs get $1 -o value -p -H $EXTP_ZFS/$VOL_NAME
+}

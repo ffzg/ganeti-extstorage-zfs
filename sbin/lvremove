@@ -7,16 +7,14 @@
 if echo $* | grep -q $EXTP_VG ; then
 	while [ ! -z "$1" ] ; do
 		if echo $1 | grep -q $EXTP_VG ; then
-			VOL_NAME=`echo $1 | sed -e "s:$EXTP_VG/::" -e 's/\.snap$/@snap/'`
+			VOL_NAME=`echo $1 | sed -e "s:$EXTP_VG/::"` # FIXME -e 's/\.snap$/@snap/'`
 		fi
 		shift;
 	done
 
 	# destroy snapshot and clone
-	if [ /dev/zvol/$EXTP_ZFS/$VOL_NAME ] ; then
-		zfs destroy -R $EXTP_ZFS/$VOL_NAME || exit 0 # FIXME
-		rm -f /dev/$EXTP_VG/$VOL_NAME
-	fi
+	export VOL_NAME
+	$dir/remove 
 else
 	/sbin/lvm lvrename $*
 fi
