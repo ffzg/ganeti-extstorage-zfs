@@ -1,24 +1,31 @@
-#!/bin/sh -e
+#!/bin/sh -ex
 
 . /usr/share/ganeti/extstorage/zfs/defaults.sh
 
+export VOL_NAME
+
+VOL() {
+	while [ ! -z "$1" ] ; do
+		case $1 in 
+		*$EXTP_VG*) VOL=`echo $1 | cut -d/ -f4` ;;
+		*) echo "# ignore $1" >&2
+		esac
+		shift
+	done
+	echo "# $VOL" >&2
+	export VOL_NAME=$VOL
+}
 # lvs --noheadings --units=m --nosuffix '--separator=|' -ovg_name,lv_name,lv_size,lv_attr
 if echo $* | grep -q vg_name,lv_name,lv_size,lv_attr ; then
 
 	zfs get volsize -t volume -r $EXTP_ZFS -H -p -o name,value | sed "s:$EXTP_ZFS/*::" | awk '{ print "  '$EXTP_VG'|"$1"|" $2 / 1024 / 1024 "|-wi-a---" }' # FIXME handle -wi-ao-- for used volumes, via ganeti:originstname ?
-	/sbin/lvm lvs $* || exit 0 # local, might fail
+	/sbin/lvm lvs $* 2>/dev/null || exit 0 # local, might fail
 
 # gnt-instance modify -t drbd -n box02 zfs
 # lvs --noheadings '--separator=|' --units=k --nosuffix -olv_attr,lv_kernel_major,lv_kernel_minor,vg_extent_size,stripes,devices /dev/ffzgvg/c72d9ea7-f396-4104-b4ee-8b613da32051.disk1
 elif echo $* | grep -q lv_attr,lv_kernel_major,lv_kernel_minor,vg_extent_size,stripes,devices ; then
-	
-	while [ ! -z "$1" ] ; do
-		case $1 in 
-		*$EXTP_VG*) VOL_NAME=`echo $1 | cut -d/ -f4` ;;
-		esac
-		shift
-	done
 
+	VOL_NAME=VOL $*
 	volblocksize=`zfs get volblocksize -o value -p -H $EXTP_ZFS/$VOL_NAME`
 	perm="-wi-ao--" # no snapshot
 	if [ -e /dev/zvol/$EXTP_ZFS/$VOL_NAME.snap ] ; then
@@ -28,6 +35,12 @@ elif echo $* | grep -q lv_attr,lv_kernel_major,lv_kernel_minor,vg_extent_size,st
 	fi
 	ls -al `readlink -f /dev/zvol/$EXTP_ZFS/$VOL_NAME` | sed 's/,//' | awk '{ print "  -wi-ao--|" $5 "|" $6 "|'$volblocksize'|1|" $10 "(" $6 * 1280 + $6 ")" }' # FIXME what is number after device?
 
+# lvs -o tags --noheadings --nosuffix /dev/ffzgvg/88c6b19f-7b3f-4041-bb9c-d2a0716e459c.disk0
+elif [ "$1" = "-o" ] ; then
+	VOL $@
+	tag=`zfs get lv:tag  -o value -p -H $EXTP_ZFS/$VOL_NAME`
+	echo $tag
 else
+echo "## $1 ## $2";
 	/sbin/lvm lvs $*
 fi
