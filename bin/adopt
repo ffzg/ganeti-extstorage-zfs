@@ -1,0 +1,6 @@
+
+#!/bin/sh
+
+. /usr/share/ganeti/extstorage/zfs/defaults.sh
+
+./bin/snap | iselect -p 1 -a -n 'adopt snapshot' | awk '{ print $1 }' | xargs -i echo zfs clone {} $EXTP_ZFS/adopt
