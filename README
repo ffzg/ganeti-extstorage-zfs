@@ -82,8 +82,13 @@ Ganti's extstorage provider doesn't support drbd target. But, lvm emulation scri
 to create -t drdb instance or convert plain (created on zfs thanks to wrappers ;-) to drdb.
 
 
-KNOWN BUGS
+KNOWN BUGS for extstorage
 
-- in current ganeti, gnt-backup export doesn't work because extstorage
-  snapshoot hook is not available
+- gnt-backup export doesn't work because extstorage snapshoot hook are not available
 - gnt-instance move works from somewhere to zfs, but not from zfs to somewhere
+
+
+KNOWN BUGS for using -t plain on top of zfs
+
+- bin/daily-block-snapshot snapshots are not correctly renamed
+
