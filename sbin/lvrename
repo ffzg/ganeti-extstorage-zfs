@@ -1,0 +1,11 @@
+#!/bin/sh -x
+
+. /usr/share/ganeti/extstorage/zfs/defaults.sh
+
+# lvrename ffzgvg cc9b16d9-7d14-452a-9150-74521bd8e721.disk0 d275c91f-70a7-4270-972c-b020fde9580b.disk0_data
+
+if [ "$EXTP_VG" = "$1" ] ; then
+	zfs rename $EXTP_ZFS/$2 $EXTP_ZFS/$3
+else
+	/sbin/lvm lvrename $*
+fi

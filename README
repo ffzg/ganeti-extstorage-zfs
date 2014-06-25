@@ -75,6 +75,13 @@ NAME                                                                      USED  
 tmp500g/block@etckeeper                                                      0      -    30K  -
 tmp500g/block/af1a90e8-0566-4cbf-bc8c-99fc82b67ce3.ext.disk0@2014-06-24  2.64M      -   610M  -
 
+
+DRBD disk replication
+
+Ganti's extstorage provider doesn't support drbd target. But, lvm emulation scripts are sufficiant enough
+to create -t drdb instance or convert plain (created on zfs thanks to wrappers ;-) to drdb.
+
+
 KNOWN BUGS
 
 - in current ganeti, gnt-backup export doesn't work because extstorage
