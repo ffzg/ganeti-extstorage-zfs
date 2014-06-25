@@ -1,1 +1,2 @@
-lvremove -f ffzgvg/3e6746a9-cb99-4584-a219-af7e4b5cb5f5.disk0_data.snap
+#lvremove -f ffzgvg/3e6746a9-cb99-4584-a219-af7e4b5cb5f5.disk0_data.snap
+lvremove -f ffzgvg/1785c7cb-fe2a-419e-9e87-6b5058385408.disk0_data

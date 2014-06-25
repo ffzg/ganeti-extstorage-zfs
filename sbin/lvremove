@@ -13,8 +13,10 @@ if echo $* | grep -q $EXTP_VG ; then
 	done
 
 	# destroy snapshot and clone
-	zfs destroy -R $EXTP_ZFS/$VOL_NAME || exit 0 # FIXME
-	test -e /dev/$EXTP_VG/$VOL_NAME && rm /dev/$EXTP_VG/$VOL_NAME
+	if [ /dev/zvol/$EXTP_ZFS/$VOL_NAME ] ; then
+		zfs destroy -R $EXTP_ZFS/$VOL_NAME || exit 0 # FIXME
+		rm -f /dev/$EXTP_VG/$VOL_NAME
+	fi
 else
 	/sbin/lvm lvrename $*
 fi
