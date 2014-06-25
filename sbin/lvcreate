@@ -20,7 +20,7 @@ if echo $* | grep -q $EXTP_VG ; then
 		shift
 	done
 
-	if [ ! $SNAP ] ; then
+	if [ $SNAP = 0 ] ; then
 
 		test -e /dev/zvol/$EXTP_ZFS/$VOL_NAME || \
 		zfs create -V ${VOL_SIZE} $EXTP_CREATE $EXTP_ZFS/$VOL_NAME
