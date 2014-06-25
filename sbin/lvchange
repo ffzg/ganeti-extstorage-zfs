@@ -1,0 +1,14 @@
+#!/bin/sh -x
+
+. /usr/share/ganeti/extstorage/zfs/defaults.sh
+
+# run lvchange for local vg only
+if echo $* | grep -q $EXTP_VG ; then
+	test -d /dev/$EXTP_VG || mkdir /dev/$EXTP_VG
+	VOL_NAME=`echo $2 | cut -d/ -f4`
+	dev=`readlink --canonicalize /dev/zvol/$EXTP_ZFS/$VOL_NAME`
+	ln -svf $dev $2
+	ls -al $2
+else
+	/sbin/lvm lvchange $*
+fi
