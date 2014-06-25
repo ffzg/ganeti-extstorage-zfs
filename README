@@ -79,4 +79,4 @@ KNOWN BUGS
 
 - in current ganeti, gnt-backup export doesn't work because extstorage
   snapshoot hook is not available
-
+- gnt-instance move works from somewhere to zfs, but not from zfs to somewhere
