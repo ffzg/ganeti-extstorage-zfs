@@ -17,6 +17,8 @@ if echo $* | grep -q $EXTP_VG ; then
 	--addtag)
 		VOL_NAME=`echo $3 | cut -d/ -f4`
 		zfs set lv:tag=$2 $EXTP_ZFS/$VOL_NAME # FIXME duplicate?
+		export EXTP_ZFS
+		export VOL_NAME
 		VOL_METADATA=$2 /usr/share/ganeti/extstorage/zfs/setinfo
 	;;
 	esac
