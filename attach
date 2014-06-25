@@ -4,7 +4,7 @@
 
 
 dev=`readlink --canonicalize /dev/zvol/$EXTP_ZFS/$VOL_NAME`
-ln -svf $dev /dev/$EXTP_VG/$VOL_NAME
+ln -svf $dev /dev/$EXTP_VG/$VOL_NAME >&1
 
 zfs set lv:a='o' $EXTP_ZFS/$VOL_NAME
 
