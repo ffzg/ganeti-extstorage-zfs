@@ -4,8 +4,8 @@
 
 dir=/usr/share/ganeti/extstorage/zfs/
 
-# zfs pool and file system (existing) where to create block devices
-test -z "$EXTP_ZFS" && EXTP_ZFS=tmp500g/block
+host_config=$dir/etc/`hostname -s`.sh
+test -e $host_config && . $host_config
 
 # parameters for zfs create, by default
 # -s	sparse
