@@ -24,7 +24,8 @@ daily-block-snapshot  purge-log
 Overview commands are available (try running them to see output):
 
 # ls bin/
-ill  list  node  size  snap
+backup  ill  instance  list  node  snap
+
 
 Create test instances:
 
