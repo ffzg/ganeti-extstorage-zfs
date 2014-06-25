@@ -1,0 +1,4 @@
+#!/bin/sh -ex
+
+ssh `gnt-cluster getmaster` \
+gnt-instance $*
