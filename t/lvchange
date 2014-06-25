@@ -1,1 +1,2 @@
-lvchange -ay /dev/ffzgvg/e4bf0e9d-2c6e-4e1c-8bc4-342ee94724a5.disk0
+# lvchange -ay /dev/ffzgvg/e4bf0e9d-2c6e-4e1c-8bc4-342ee94724a5.disk0
+lvchange --addtag originstname+t-drbd /dev/ffzgvg/5e8966e5-3aa4-4ba4-9c9a-cb2a0ee5b98b.disk0_meta

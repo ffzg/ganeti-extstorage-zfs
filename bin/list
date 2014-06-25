@@ -2,4 +2,4 @@
 
 . /usr/share/ganeti/extstorage/zfs/defaults.sh
 
-zfs list -r $EXTP_ZFS -o name,logicalused,used,available,refer
+zfs list -r $EXTP_ZFS -o name,logicalused,used,available,refer,ganeti:originstname

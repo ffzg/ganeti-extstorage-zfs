@@ -5,12 +5,23 @@
 # run lvchange for local vg only
 if echo $* | grep -q $EXTP_VG ; then
 	test -d /dev/$EXTP_VG || mkdir /dev/$EXTP_VG
+	case $1 in
+	-ay)
 	VOL_NAME=`echo $2 | cut -d/ -f4`
 	dev=`readlink --canonicalize /dev/zvol/$EXTP_ZFS/$VOL_NAME`
 	if [ -e "$dev" ] ; then
 		ln -svf $dev $2
 		ls -al $2
 	fi
+	;;
+	--addtag)
+		VOL_NAME=`echo $3 | cut -d/ -f4`
+		zfs set lv:tag=$2 $EXTP_ZFS/$VOL_NAME # FIXME duplicate?
+		tag=`echo $2 | cut -d+ -f1`
+		val=`echo $2 | cut -d+ -f2-`
+		zfs set ganeti:$tag=$val $EXTP_ZFS/$VOL_NAME
+	;;
+	esac
 else
 	/sbin/lvm lvchange $*
 fi
