@@ -1,8 +1,8 @@
-#!/bin/sh -ex
+#!/bin/sh -x
 
 . /usr/share/ganeti/extstorage/zfs/defaults.sh
 
-/sbin/lvm lvs $* || true
+if echo $* | grep -q $EXTP_VG ; then
 
 # lvs --noheadings --units=m --nosuffix '--separator=|' -ovg_name,lv_name,lv_size,lv_attr
 if echo $* | grep -q vg_name,lv_name,lv_size,lv_attr ; then
@@ -21,8 +21,17 @@ elif echo $* | grep -q lv_attr,lv_kernel_major,lv_kernel_minor,vg_extent_size,st
 	done
 
 	volblocksize=`zfs get volblocksize -o value -p -H $EXTP_ZFS/$VOL_NAME`
-	ls -al `readlink -f /dev/zvol/$EXTP_ZFS/$VOL_NAME` | sed 's/,//' | awk '{ print "  -wi-ao--|" $5 "|" $6 "|'$volblocksize'|1|" $10 "(42)" }' # FIXME what is number after device?
+	perm="-wi-ao--" # no snapshot
+	if [ -e /dev/zvol/$EXTP_ZFS/$VOL_NAME.snap ] ; then
+		perm="owi-aos-" # snapshot origin
+	elif echo $VOL_NAME | grep -q '.snap$' ; then
+		perm="swi-a-s-" # snapshot
+	fi
+	ls -al `readlink -f /dev/zvol/$EXTP_ZFS/$VOL_NAME` | sed 's/,//' | awk '{ print "  -wi-ao--|" $5 "|" $6 "|'$volblocksize'|1|" $10 "(" $6 * 1280 + $6 ")" }' # FIXME what is number after device?
 
 
 fi
 
+else
+	/sbin/lvm lvs $*
+fi
