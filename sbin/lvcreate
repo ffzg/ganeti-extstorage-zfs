@@ -31,6 +31,7 @@ if echo $* | grep -q $EXTP_VG ; then
 		sleep 1
 		zfs clone $EXTP_ZFS/$VOL_ORIGIN@snap $EXTP_ZFS/$VOL_NAME
 		sleep 1
+		ln -sfv `readlink -f /dev/zvol/$EXTP_ZFS/$VOL_NAME` /dev/$EXTP_VG/$VOL_NAME
 
 	fi
 
