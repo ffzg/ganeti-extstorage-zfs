@@ -1,13 +1,28 @@
-#!/bin/sh
+#!/bin/sh -ex
 
 . /usr/share/ganeti/extstorage/zfs/defaults.sh
 
-/sbin/lvm lvs $*
+/sbin/lvm lvs $* || true
 
 # lvs --noheadings --units=m --nosuffix '--separator=|' -ovg_name,lv_name,lv_size,lv_attr
-if echo $* | -q grep vg_name,lv_name,lv_size,lv_attr ; then
+if echo $* | grep -q vg_name,lv_name,lv_size,lv_attr ; then
 
-	zfs get volsize -t volume -r $EXPN_ZFS -H -p -o name,value | sed "s:$EXPN_ZFS::" | awk '{ print "  '$EXPN_VG'|"$1"|" $2 / 1024 / 1024 "|-wi-ao--" }'
+	zfs get volsize -t volume -r $EXTP_ZFS -H -p -o name,value | sed "s:$EXTP_ZFS::" | awk '{ print "  '$EXTP_VG'|"$1"|" $2 / 1024 / 1024 "|-wi-ao--" }'
+
+# gnt-instance modify -t drbd -n box02 zfs
+# lvs --noheadings '--separator=|' --units=k --nosuffix -olv_attr,lv_kernel_major,lv_kernel_minor,vg_extent_size,stripes,devices /dev/ffzgvg/c72d9ea7-f396-4104-b4ee-8b613da32051.disk1
+elif echo $* | grep -q lv_attr,lv_kernel_major,lv_kernel_minor,vg_extent_size,stripes,devices ; then
+	
+	while [ ! -z "$1" ] ; do
+		case $1 in 
+		*$EXTP_VG*) VOL_NAME=`echo $1 | cut -d/ -f4` ;;
+		esac
+		shift
+	done
+
+	volblocksize=`zfs get volblocksize -o value -p -H $EXTP_ZFS/$VOL_NAME`
+	ls -al `readlink -f /dev/zvol/$EXTP_ZFS/$VOL_NAME` | sed 's/,//' | awk '{ print "  -wi-ao--|" $5 "|" $6 "|'$volblocksize'|1|" $10 }'
+
 
 fi
 
