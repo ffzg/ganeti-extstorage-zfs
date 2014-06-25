@@ -1,0 +1,4 @@
+#!/bin/sh -e
+
+ssh `gnt-cluster getmaster` \
+gnt-backup $*

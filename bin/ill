@@ -1,0 +1,4 @@
+#!/bin/sh -e
+
+ssh `gnt-cluster getmaster` \
+gnt-instance list -o name,status,oper_vcpus,oper_ram,disk_usage,pnode,snodes | grep "$*"

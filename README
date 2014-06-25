@@ -4,76 +4,41 @@ http://docs.ganeti.org/ganeti/master/html/man-ganeti-extstorage-interface.html
 
 INSTALLATION
 
-On node which has zfs storage pool
+On node which will host zfs storage pool
 
   cd /usr/share/ganeti/extstorage/
   git clone https://github.com/ffzg/ganeti-extstorage-zfs zfs
   cd zfs
   vi defaults.sh
 
-You need to specify zfs filesystem under which block devices will be created.
+Run install scripts:
 
-Now ssh into ganeti master node and do following:
+# ls install/
+1-enable-ext-template.sh  2-create-log-directory.sh  3-lvm-wrappers.sh
 
-1. enable new disk template
+Cron helper can be install under /etc/cron.daily
 
-  gnt-cluster modify --enabled-disk-templates plain,drbd,ext \
-	--ipolicy-disk-templates plain,drbd,ext
+# ls cron/
+daily-block-snapshot  purge-log
 
-2. create log directory
+Overview commands are available (try running them to see output):
 
-  mkdir /var/log/ganeti/extstorage
+# ls bin/
+ill  list  node  size  snap
 
-3. try instance creation with something similar to
+Create test instances:
 
-  gnt-instance add -t ext --disk=0:size=10G,provider=zfs \
-	--net 0:mode=bridged,link=br1001 \
-	--net 1:mode=bridged,link=br0060 \
-	--net 2:mode=bridged,link=br0080 \
-	--no-name-check --no-ip-check \
-	-o debootstrap+default \
-	-B maxmem=1G -n arh-hw zfs
+# ls t/*.sh
+t/drbd.sh  t/plain.sh  t/zfs.sh
 
-4. install helper scripts for daily block snapshots
+Review that instaces have been created:
 
-  ln -sf /usr/share/ganeti/extstorage/zfs/bin/daily-block-snapshot /etc/cron.daily/
+# ./bin/ill t-
 
-5. install lvm wrapper scripts to report zfs volumes as lv
+Test ganeti commands after reading them:
 
-  find /usr/share/ganeti/extstorage/zfs/sbin/ -type f | xargs -i ln -v -s -f {} /sbin/
-
-This scripts enable gnt-node commands to work:
-
-root@vmh02:/home/dpavlin# gnt-node list arh-hw
-Node               DTotal DFree MTotal MNode MFree Pinst Sinst
-arh-hw.gnt.ffzg.hr  87.8G 87.2G   7.8G  252M  5.6G     1     0
-
-root@vmh02:/home/dpavlin# gnt-node list-storage arh-hw
-Node               Type   Name     Size  Used   Free Allocatable
-arh-hw.gnt.ffzg.hr lvm-vg arh-hw 190.0G 62.7G 127.3G Y
-arh-hw.gnt.ffzg.hr lvm-vg ffzgvg  87.8G  610M  87.2G Y
-
-
-HELPER SCRIPTS
-
-Helper scripts in bin directory list volumes, show size or snapshots.
-
-
-arh-hw:/usr/share/ganeti/extstorage/zfs# ./bin/list 
-NAME                                                           USED  AVAIL  REFER  MOUNTPOINT
-tmp500g/block                                                  612M  87.2G    30K  /tmp500g/block
-tmp500g/block/af1a90e8-0566-4cbf-bc8c-99fc82b67ce3.ext.disk0   612M  87.2G   610M  -
-
-
-arh-hw:/usr/share/ganeti/extstorage/zfs# ./bin/size 
-NAME                                                          PROPERTY  VALUE    SOURCE
-tmp500g/block/af1a90e8-0566-4cbf-bc8c-99fc82b67ce3.ext.disk0  volsize   11G      local
-
-
-arh-hw:/usr/share/ganeti/extstorage/zfs# ./bin/snapshots 
-NAME                                                                      USED  AVAIL  REFER  MOUNTPOINT
-tmp500g/block@etckeeper                                                      0      -    30K  -
-tmp500g/block/af1a90e8-0566-4cbf-bc8c-99fc82b67ce3.ext.disk0@2014-06-24  2.64M      -   610M  -
+# ls t/gnt-*
+t/gnt-backup-export.sh  t/gnt-instance-modify.sh
 
 
 DRBD disk replication
@@ -90,5 +55,5 @@ KNOWN BUGS for extstorage
 
 KNOWN BUGS for using -t plain on top of zfs
 
-- bin/daily-block-snapshot snapshots are not correctly renamed
+- cron/daily-block-snapshot snapshots are not correctly renamed
 
