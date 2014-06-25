@@ -1,0 +1,3 @@
+vgs --noheadings --units=m --nosuffix --separator '|' --options vg_name,vg_size,vg_free
+vgs --noheadings --nosuffix --units=m --unbuffered '--separator=|' -ovg_name,vg_free,vg_attr,vg_size
+vgs --noheadings --units m --nosuffix -o name,size

@@ -2,9 +2,7 @@
 
 . /usr/share/ganeti/extstorage/zfs/defaults.sh
 
-set -x
-
-/sbin/lvm vgs $*
+#set -x
 
 # gnt-node list-storage
 # vgs --noheadings --units=m --nosuffix --separator '|' --options vg_name,vg_size,vg_free
@@ -15,5 +13,14 @@ if echo $* | grep -q vg_name,vg_size,vg_free ; then
 # vgs --noheadings --nosuffix --units=m --unbuffered '--separator=|' -ovg_name,vg_free,vg_attr,vg_size
 elif echo $* | grep -q vg_name,vg_free,vg_attr,vg_size ; then
 	zfs list -H -p -o available,used $EXTP_ZFS | awk '{ print "  '$EXTP_VG'|" $1 / 1024 / 1024 "|wz--n-|" ( $1 + $2 ) / 1024 / 1024 }'
+
+# gnt-node add --disk 0:adopt=zfs-root
+# vgs --noheadings --units m --nosuffix -o name,size
+elif echo $* | grep -q name,size ; then
+	zfs list -H -p -o used,available $EXTP_ZFS | awk '{ print "  '$EXTP_VG' " ( $1 + $2 ) / 1024 / 1024 }'
+
+else
+
+/sbin/lvm vgs $*
 
 fi
