@@ -1,4 +1,4 @@
-#!/bin/sh -x
+#!/bin/sh
 
 . /usr/share/ganeti/extstorage/zfs/defaults.sh
 
@@ -8,18 +8,17 @@ if echo $* | grep -q $EXTP_VG ; then
 	case $1 in
 	-ay)
 	VOL_NAME=`echo $2 | cut -d/ -f4`
-	dev=`readlink --canonicalize /dev/zvol/$EXTP_ZFS/$VOL_NAME`
-	if [ -e "$dev" ] ; then
-		ln -svf $dev $2
-		ls -al $2
-	fi
+	export VOL_NAME
+	$dir/attach
 	;;
 	--addtag)
 		VOL_NAME=`echo $3 | cut -d/ -f4`
-		zfs set lv:tag=$2 $EXTP_ZFS/$VOL_NAME # FIXME duplicate?
+		zfs set lv:tag=$2 $EXTP_ZFS/$VOL_NAME
+
 		export EXTP_ZFS
 		export VOL_NAME
-		VOL_METADATA=$2 /usr/share/ganeti/extstorage/zfs/setinfo
+		export VOL_METADATA=$2
+		$dir/setinfo
 	;;
 	esac
 else

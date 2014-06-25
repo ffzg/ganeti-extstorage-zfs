@@ -2,4 +2,6 @@
 
 . /usr/share/ganeti/extstorage/zfs/defaults.sh
 
-#eject /dev/zvol/$EXTP_ZFS/$VOL_NAME
+rm /dev//$EXTP_VG/$VOL_NAME
+zfs set lv:a='-' $EXTP_ZFS/$VOL_NAME
+

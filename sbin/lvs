@@ -1,4 +1,4 @@
-#!/bin/sh -ex
+#!/bin/sh -e
 
 . /usr/share/ganeti/extstorage/zfs/defaults.sh
 
@@ -14,11 +14,13 @@ VOL() {
 	done
 	echo "# $VOL" >&2
 	export VOL_NAME=$VOL
+		
 }
+
 # lvs --noheadings --units=m --nosuffix '--separator=|' -ovg_name,lv_name,lv_size,lv_attr
 if echo $* | grep -q vg_name,lv_name,lv_size,lv_attr ; then
-
-	zfs get volsize -t volume -r $EXTP_ZFS -H -p -o name,value | sed "s:$EXTP_ZFS/*::" | awk '{ print "  '$EXTP_VG'|"$1"|" $2 / 1024 / 1024 "|-wi-a---" }' # FIXME handle -wi-ao-- for used volumes, via ganeti:originstname ?
+	zfs list -o name,volsize,lv:a -t volume -r $EXTP_ZFS -H -p | sed "s:$EXTP_ZFS/*::" | \
+	awk '{ print "  '$EXTP_VG'|"$1"|" $2 / 1024 / 1024 "|-wi-a"$3"--" }'
 	/sbin/lvm lvs $* 2>/dev/null || exit 0 # local, might fail
 
 # gnt-instance modify -t drbd -n box02 zfs
@@ -27,7 +29,7 @@ elif echo $* | grep -q lv_attr,lv_kernel_major,lv_kernel_minor,vg_extent_size,st
 
 	VOL_NAME=VOL $*
 	volblocksize=`zfs get volblocksize -o value -p -H $EXTP_ZFS/$VOL_NAME`
-	perm="-wi-ao--" # no snapshot
+	perm=`zfs get lv:attr -o value -p -H $EXTP_ZFS/$VOL_NAME`
 	if [ -e /dev/zvol/$EXTP_ZFS/$VOL_NAME.snap ] ; then
 		perm="owi-aos-" # snapshot origin
 	elif echo $VOL_NAME | grep -q '.snap$' ; then
@@ -41,6 +43,6 @@ elif [ "$1" = "-o" ] ; then
 	tag=`zfs get lv:tag  -o value -p -H $EXTP_ZFS/$VOL_NAME`
 	echo $tag
 else
-echo "## $1 ## $2";
+
 	/sbin/lvm lvs $*
 fi

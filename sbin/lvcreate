@@ -1,8 +1,6 @@
-#!/bin/sh -xe
+#!/bin/sh -e
 
 . /usr/share/ganeti/extstorage/zfs/defaults.sh
-
-set -x
 
 # gnt-instance move --node arh-hw bbb
 # lvcreate -L5120m -ne4bf0e9d-2c6e-4e1c-8bc4-342ee94724a5.disk0 -i1 ffzgvg tmp500g/block

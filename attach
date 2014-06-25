@@ -2,5 +2,11 @@
 
 . /usr/share/ganeti/extstorage/zfs/defaults.sh
 
+
+dev=`readlink --canonicalize /dev/zvol/$EXTP_ZFS/$VOL_NAME`
+ln -svf $dev /dev/$EXTP_VG/$VOL_NAME
+
+zfs set lv:a='o' $EXTP_ZFS/$VOL_NAME
+
 # Return path to new blockdevice
 echo -n /dev/zvol/$EXTP_ZFS/$VOL_NAME
