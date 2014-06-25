@@ -21,7 +21,7 @@ elif echo $* | grep -q lv_attr,lv_kernel_major,lv_kernel_minor,vg_extent_size,st
 	done
 
 	volblocksize=`zfs get volblocksize -o value -p -H $EXTP_ZFS/$VOL_NAME`
-	ls -al `readlink -f /dev/zvol/$EXTP_ZFS/$VOL_NAME` | sed 's/,//' | awk '{ print "  -wi-ao--|" $5 "|" $6 "|'$volblocksize'|1|" $10 }'
+	ls -al `readlink -f /dev/zvol/$EXTP_ZFS/$VOL_NAME` | sed 's/,//' | awk '{ print "  -wi-ao--|" $5 "|" $6 "|'$volblocksize'|1|" $10 "(42)" }' # FIXME what is number after device?
 
 
 fi
