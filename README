@@ -58,5 +58,4 @@ KNOWN BUGS for using -t plain on top of zfs
 
 - cron/daily-block-snapshot snapshots are not correctly renamed
 - bin/adopt will create new zvol using send/receive to break dependency on origin
-  but vm disks should be promoted, and adopt zvol deleted manually
-
+  (otherwise, deleting of origin file system will also delete new adopted instance)
