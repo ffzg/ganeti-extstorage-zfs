@@ -1,1 +1,2 @@
-lvrename ffzgvg cc9b16d9-7d14-452a-9150-74521bd8e721.disk0 d275c91f-70a7-4270-972c-b020fde9580b.disk0_data
+#lvrename ffzgvg cc9b16d9-7d14-452a-9150-74521bd8e721.disk0 d275c91f-70a7-4270-972c-b020fde9580b.disk0_data
+lvrename ffzgvg adopt 889e5ad5-eb02-45ca-90b5-b85005c61760.disk0
