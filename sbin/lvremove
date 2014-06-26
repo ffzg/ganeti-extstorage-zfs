@@ -12,9 +12,15 @@ if echo $* | grep -q $EXTP_VG ; then
 		shift;
 	done
 
+	origin=$(zfs_get lv:origin)
+
 	# destroy snapshot and clone
 	export VOL_NAME
-	$dir/remove 
+	$dir/remove
+	if [ ! -z "$origin" ] ; then
+		VOL_NAME=$origin@snap $dir/remove
+		zfs set lv:s='-' $EXTP_ZFS/$origin
+	fi
 else
 	/sbin/lvm lvrename $*
 fi

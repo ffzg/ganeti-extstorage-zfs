@@ -30,6 +30,7 @@ if echo $* | grep -q $EXTP_VG ; then
 		zfs clone $EXTP_ZFS/$VOL_ORIGIN@snap $EXTP_ZFS/$VOL_NAME || true
 		zfs set lv:s='s' $EXTP_ZFS/$VOL_NAME
 		zfs set ganeti:originstname=$(VOL_NAME=$VOL_ORIGIN zfs_get ganeti:originstname) $EXTP_ZFS/$VOL_NAME
+		zfs set lv:origin=$VOL_ORIGIN $EXTP_ZFS/$VOL_NAME
 		export VOL_NAME
 		echo $VOL_NAME
 		$dir/attach
