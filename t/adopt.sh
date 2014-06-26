@@ -1,3 +1,5 @@
+./bin/adopt
+
 ssh `gnt-cluster getmaster` \
   gnt-instance add -t plain --disk=0:adopt=adopt \
 	-o debootstrap+default \
