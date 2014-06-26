@@ -1,7 +1,5 @@
-
 #!/bin/sh
 
 . /usr/share/ganeti/extstorage/zfs/defaults.sh
 
-./bin/snap | iselect -p 2 -a -n 'adopt snapshot' | awk '{ print $1 }' | xargs -i sh -cx \
-'zfs clone {} '$EXTP_ZFS'/adopt && zfs set ganeti:originstname=`zfs get ganeti:originstname -o value -p -H {}`+adopt '$EXTP_ZFS'/adopt'
+./bin/snap | iselect -p 2 -a -n 'adopt snapshot' | awk '{ print $1 }' | xargs -i sh -cx 'zfs clone {} '$EXTP_ZFS'/adopt && zfs set ganeti:originstname=`zfs get ganeti:originstname -o value -p -H {}`+adopt '$EXTP_ZFS'/adopt'
