@@ -11,11 +11,11 @@ if echo $* | grep -q $EXTP_VG ; then
 		fi
 		shift;
 	done
+	export VOL_NAME
 
 	origin=$(zfs_get lv:origin)
 
 	# destroy snapshot and clone
-	export VOL_NAME
 	$dir/remove
 	if [ ! -z "$origin" ] ; then
 		VOL_NAME=$origin@snap $dir/remove
