@@ -24,8 +24,10 @@ daily-block-snapshot  purge-log
 Overview commands are available (try running them to see output):
 
 # ls bin/
-backup  ill  instance  list  node  snap
+adopt  backup  ill  instance  list  node
 
+backup and instance are wrappers for running gnt-* commands
+with same name on master node
 
 Create test instances:
 
