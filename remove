@@ -11,3 +11,7 @@ test ! -z "$origin" && zfs set lv:s='-' $EXTP_ZFS/$origin
 rm -f /dev/$EXTP_VG/$VOL_NAME
 zfs destroy $EXTP_DESTROY $EXTP_ZFS/$VOL_NAME
 
+snap=$(echo $VOL_NAME | sed 's/\.snap$/@snap/')
+if [ $snap != $VOL_NAME ] ; then
+	zfs destroy $EXTP_DESTROY $EXTP_ZFS/$snap
+fi
