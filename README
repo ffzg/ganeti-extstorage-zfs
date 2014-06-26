@@ -1,4 +1,4 @@
-Ganet extstorage provider for local zfs volumes
+Ganeti extstorage provider for local zfs volumes
 
 http://docs.ganeti.org/ganeti/master/html/man-ganeti-extstorage-interface.html
 
@@ -44,8 +44,8 @@ t/gnt-backup-export.sh  t/gnt-instance-modify.sh
 
 DRBD disk replication
 
-Ganti's extstorage provider doesn't support drbd target. But, lvm emulation scripts are sufficiant enough
-to create -t drdb instance or convert plain (created on zfs thanks to wrappers ;-) to drdb.
+Ganeti's extstorage provider doesn't support drbd target. But, lvm emulation scripts are sufficiant enough
+to create -t drbd instance or convert plain (created on zfs thanks to wrappers ;-) to drbd.
 
 
 KNOWN BUGS for extstorage
