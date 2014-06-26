@@ -1,5 +1,0 @@
-#!/bin/sh
-
-. /usr/share/ganeti/extstorage/zfs/defaults.sh
-
-zfs list -t snapshot -r $EXTP_ZFS -o name,volsize,logicalused,used,available,refer,ganeti:originstname
