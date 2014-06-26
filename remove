@@ -2,5 +2,12 @@
 
 . /usr/share/ganeti/extstorage/zfs/defaults.sh
 
+test -e /dev/zvol/$EXTP_VG/$VOL_NAME || exit 0
+
+# remove snapshot flag on origin
+origin=$(zfs_get lv:origin)
+test ! -z "$origin" && zfs set lv:s='-' $EXTP_ZFS/$origin
+
 rm -f /dev/$EXTP_VG/$VOL_NAME
-zfs destroy $EXTP_DESTROY $EXTP_ZFS/$VOL_NAME || true
+zfs destroy $EXTP_DESTROY $EXTP_ZFS/$VOL_NAME
+
