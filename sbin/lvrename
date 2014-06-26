@@ -11,6 +11,8 @@ if [ "$EXTP_VG" = "$1" ] ; then
 		# rename filesystems with snapshots using clone/promote
 		zfs snap  $EXTP_ZFS/$2@$3
 		zfs clone $EXTP_ZFS/$2@$3 $EXTP_ZFS/$3
+		zfs promote $EXTP_ZFS/$3  # new zvol is now origin
+		zfs destroy -R $EXTP_ZFS/$3@$3
 	)
 else
 	/sbin/lvm lvrename $*
