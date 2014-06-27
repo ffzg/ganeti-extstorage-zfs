@@ -7,6 +7,7 @@ It also encludes LVM emulation which enable zfs to work as plain disk type.
 This allows sage of drbd where one (or both) sides are on zfs, and supports
 gnt-backup export and import.
 
+
 INSTALLATION
 
 On node which will host zfs storage pool
@@ -16,15 +17,18 @@ On node which will host zfs storage pool
   cd zfs
   vi defaults.sh
 
+
 Run install scripts:
 
 # ls install/
 1-enable-ext-template.sh  2-create-log-directory.sh  3-lvm-wrappers.sh
 
+
 Cron helper can be install under /etc/cron.daily
 
 # ls cron/
 daily-block-snapshot  purge-log
+
 
 Overview commands are available (try running them to see output):
 
@@ -33,6 +37,10 @@ adopt  backup  ill  instance  list  node
 
 backup and instance are wrappers for running gnt-* commands
 with same name on master node
+
+adopt will create new zvol using send/receive to break dependency on origin
+(otherwise, removal of origin zvol will also remove new adopted disk
+
 
 Create test instances:
 
@@ -51,18 +59,13 @@ t/gnt-backup-export.sh  t/gnt-instance-modify.sh
 
 DRBD disk replication
 
-Ganeti's extstorage provider doesn't support drbd target. But, lvm emulation scripts are sufficiant enough
-to create -t drbd instance or convert plain (created on zfs thanks to wrappers ;-) to drbd.
+Ganeti's extstorage provider doesn't support drbd target.  But, lvm emulation
+scripts are sufficiant enough to create -t drbd instance or convert plain
+(created on zfs thanks to wrappers ;-) to drbd.
 
 
 KNOWN BUGS for extstorage
 
-- gnt-backup export doesn't work because extstorage snapshoot hook are not available
+- gnt-backup export doesn't work because snapshoot hooks are not available
 - gnt-instance move works from somewhere to zfs, but not from zfs to somewhere
 
-
-KNOWN BUGS for using -t plain on top of zfs
-
-- cron/daily-block-snapshot snapshots are not correctly renamed
-- bin/adopt will create new zvol using send/receive to break dependency on origin
-  (otherwise, deleting of origin file system will also delete new adopted instance)
