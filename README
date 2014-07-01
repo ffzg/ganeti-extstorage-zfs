@@ -4,7 +4,7 @@ http://docs.ganeti.org/ganeti/master/html/man-ganeti-extstorage-interface.html
 
 It also encludes LVM emulation which enable zfs to work as plain disk type.
 
-This allows sage of drbd where one (or both) sides are on zfs, and supports
+This allows usage of drbd where one (or both) sides are on zfs, and supports
 gnt-backup export and import.
 
 
