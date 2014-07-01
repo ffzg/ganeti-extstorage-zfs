@@ -8,7 +8,7 @@
 
 if echo $* | grep -q pv_name,vg_name,pv_free,pv_attr,pv_size,pv_name ; then
 
-	zfs list $EXTP_ZFS -H -p -o avail,used | sed "s:$EXTP_ZFS::" | awk '{ print "  '$EXTP_ZFS'|'$EXTP_VG'|" $1 / 1024 / 1024 "|a--|" ( $1 + $2 ) / 1024 / 1024 "|'$EXTP_ZFS'" }'
+	zfs list $EXTP_ZFS -H -p -o avail,$EXTP_ZFS | sed "s:$EXTP_ZFS::" | awk '{ print "  '$EXTP_ZFS'|'$EXTP_VG'|" $1 / 1024 / 1024 "|a--|" ( $1 + $2 ) / 1024 / 1024 "|'$EXTP_ZFS'" }'
 
 fi
 

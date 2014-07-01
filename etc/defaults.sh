@@ -1,5 +1,5 @@
 # debugging options
-#set -x
+set -x
 #set >&2
 
 dir=/usr/share/ganeti/extstorage/zfs/
@@ -21,6 +21,9 @@ test -z "$EXTP_VG" && EXTP_VG='ffzgvg'
 
 # zfs pool and file system (existing) where to create block devices
 test -z "$EXTP_ZFS" && EXTP_ZFS=tmp500g/$EXTP_VG
+
+# show numbers without compression for volume sizes
+test -z "$EXTP_USED" && EXTP_USED=logicalused
 
 export VOL_NAME
 

@@ -5,17 +5,17 @@
 # gnt-node list-storage
 # vgs --noheadings --units=m --nosuffix --separator '|' --options vg_name,vg_size,vg_free
 if echo $* | grep -q vg_name,vg_size,vg_free ; then
-	zfs list -H -p -o used,available $EXTP_ZFS | awk '{ print "  '$EXTP_VG'|" ( $1 + $2 ) / 1024 / 1024 "|" $2 / 1024 / 1024 }'
+	zfs list -H -p -o $EXTP_USED,available $EXTP_ZFS | awk '{ print "  '$EXTP_VG'|" ( $1 + $2 ) / 1024 / 1024 "|" $2 / 1024 / 1024 }'
 
 # gnt-node list
 # vgs --noheadings --nosuffix --units=m --unbuffered '--separator=|' -ovg_name,vg_free,vg_attr,vg_size
 elif echo $* | grep -q vg_name,vg_free,vg_attr,vg_size ; then
-	zfs list -H -p -o available,used $EXTP_ZFS | awk '{ print "  '$EXTP_VG'|" $1 / 1024 / 1024 "|wz--n-|" ( $1 + $2 ) / 1024 / 1024 }'
+	zfs list -H -p -o available,$EXTP_USED $EXTP_ZFS | awk '{ print "  '$EXTP_VG'|" $1 / 1024 / 1024 "|wz--n-|" ( $1 + $2 ) / 1024 / 1024 }'
 
 # gnt-node add --disk 0:adopt=zfs-root
 # vgs --noheadings --units m --nosuffix -o name,size
 elif echo $* | grep -q name,size ; then
-	zfs list -H -p -o used,available $EXTP_ZFS | awk '{ print "  '$EXTP_VG' " ( $1 + $2 ) / 1024 / 1024 }'
+	zfs list -H -p -o $EXTP_USED,available $EXTP_ZFS | awk '{ print "  '$EXTP_VG' " ( $1 + $2 ) / 1024 / 1024 }'
 
 else
 

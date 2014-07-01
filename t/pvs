@@ -1,0 +1,1 @@
+vgs --noheadings --units=m --nosuffix --separator '|' --options vg_name,vg_size,vg_free
