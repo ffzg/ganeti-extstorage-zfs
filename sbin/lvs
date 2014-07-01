@@ -21,6 +21,13 @@ if echo $* | grep -q vg_name,lv_name,lv_size,lv_attr ; then
 	awk '{ print "  '$EXTP_VG'|"$1"|" $2 / 1024 / 1024 "|"$3"wi-a"$4"--" }'
 	/sbin/lvm lvs $* 2>/dev/null || exit 0 # local, might fail
 
+# gnt-node volumes
+# lvs --noheadings --units=m --nosuffix '--separator=|' --options=lv_name,lv_size,devices,vg_name
+elif echo $* | grep -q lv_name,lv_size,devices,vg_name ; then
+	zfs list -o name,volsize -t volume -r $EXTP_ZFS -H -p | sed "s:$EXTP_ZFS/*::" | \
+	awk '{ print "  "$1"|" $2 / 1024 / 1024 "|zfs|'$EXTP_VG'" }'
+	/sbin/lvm lvs $* 2>/dev/null || exit 0 # local, might fail
+
 # gnt-instance modify -t drbd -n box02 zfs
 # lvs --noheadings '--separator=|' --units=k --nosuffix -olv_attr,lv_kernel_major,lv_kernel_minor,vg_extent_size,stripes,devices /dev/ffzgvg/c72d9ea7-f396-4104-b4ee-8b613da32051.disk1
 elif echo $* | grep -q lv_attr,lv_kernel_major,lv_kernel_minor,vg_extent_size,stripes,devices ; then
