@@ -1,5 +1,5 @@
 # debugging options
-set -x
+#set -x
 #set >&2
 
 dir=/usr/share/ganeti/extstorage/zfs/
