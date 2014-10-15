@@ -17,6 +17,12 @@ On node which will host zfs storage pool
   cd zfs
   vi defaults.sh
 
+Alternative to editing defaults.sh is to create etc/`hostname -s` file
+with minimal configuration which just specify pool name (in this case
+again hostname -s) and filesystem where new volumes will be created:
+
+  echo EXTP_ZFS=`hostname -s`/ffzgvg > etc/`hostname -s`.sh  
+ 
 
 Run install scripts:
 
