@@ -1,0 +1,41 @@
+#!/bin/sh -e
+
+. /usr/share/ganeti/extstorage/zfs/defaults.sh
+
+# gnt-instance grow-disk t-plain 0 100M
+# lvextend -L +102400k --test --alloc contiguous /dev/ffzgvg/fa2e60f4-22e5-4620-baac-385418139ce7.disk0
+# lvextend -L +102400k --test --alloc cling /dev/ffzgvg/fa2e60f4-22e5-4620-baac-385418139ce7.disk0
+# lvextend -L +102400k --test --alloc normal /dev/ffzgvg/fa2e60f4-22e5-4620-baac-385418139ce7.disk0
+
+if echo $* | grep -q $EXTP_VG ; then
+	TEST='-'
+	while [ ! -z "$1" ] ; do
+		case $1 in 
+
+		-L*) VOL_SIZE_INC=`echo $2 | sed -e 's/-L//' -e 's/^\+//' -e 's/k$//'` ;;
+		--test)  TEST='test' ;;
+		/dev/$EXTP_VG/*) VOL_NAME=`echo $1 | cut -d/ -f4`
+
+		esac
+		shift
+	done
+
+	if [ $TEST = 'test' ] ; then
+
+		available=`zfs get -H -p available -o value $EXTP_ZFS/$VOL_NAME`
+		if [ `expr $available \/ 1024` -gt $VOL_SIZE_INC ] ; then
+			exit 0 # OK to enlarge
+		else
+			exit 1
+		fi
+
+	else
+
+		volsize=`zfs get -H -p volsize -o value $EXTP_ZFS/$VOL_NAME`
+		zfs set volsize=`expr $volsize \/ 1024 + $VOL_SIZE_INC`k $EXTP_ZFS/$VOL_NAME
+
+	fi
+
+else
+	/sbin/lvm lvextend $*
+fi

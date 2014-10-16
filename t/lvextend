@@ -1,0 +1,4 @@
+# gnt-instance grow-disk t-plain 0 100M
+lvextend -L +102400k --test --alloc contiguous /dev/ffzgvg/fa2e60f4-22e5-4620-baac-385418139ce7.disk0
+lvextend -L +102400k --test --alloc cling /dev/ffzgvg/fa2e60f4-22e5-4620-baac-385418139ce7.disk0
+lvextend -L +102400k --test --alloc normal /dev/ffzgvg/fa2e60f4-22e5-4620-baac-385418139ce7.disk0
